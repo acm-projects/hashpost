@@ -24,6 +24,12 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Can i access ur nudes pls</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>pretty pls</string>
+	<key>NSCameraUsageDescription</key>
+	<string>spying on u kek</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
