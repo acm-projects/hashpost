@@ -28,8 +28,12 @@ class HashPost extends StatelessWidget {
         )
       ),
 
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/editing': (context) => EditingScreen(),
+      },
       // home screen, which we will replace with initialRoute when we add routes
-      home: HomeScreen()
+      initialRoute: '/'
     );
   }
 }

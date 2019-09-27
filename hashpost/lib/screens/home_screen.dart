@@ -1,34 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:hashpost/shared/shared.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
-  File _image;
-
-  // for images
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _image = image;
-    });
-  }
-  Future getPic() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      _image = image;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,27 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.only(top: 20.0, bottom:20.0, left: 10.0, right: 2.0),
                   child: Container(
                     color: Color(0xffE3E4E6),
-                    child: FlatButton(
-                      onPressed: getImage,
-                      child: Center(
-                        child: Icon(Icons.add, size: 100.0,),
-                      ),
-                    ),
+                    child: new ImageButton(),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0, bottom:20.0, left: 2.0, right: 10.0),
                   child: Container(
                     color: Color(0xffE3E4E6),
-                    child: FlatButton(
-                      onPressed: getPic,
-                      child: Center(
-                        child: Icon(Icons.camera, size: 100.0,),
-                      ),
-                    ),
+                    child: new CameraButton(),
                   ),
                 ),
-                
               ],
             ),
           ),
