@@ -20,7 +20,7 @@ def posts(request: Request) -> Response:
     # TODO(posts): Handle request
     posts = []
     posts_json = json.dumps(posts)
-    response = Response(posts, content_type='application/json; charset=utf-8')
+    response = Response(posts_json, content_type='application/json; charset=utf-8')
     response.headers.add('content-length', len(posts_json))
     return response
 
