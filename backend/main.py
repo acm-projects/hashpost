@@ -1,6 +1,12 @@
 import json
-from flask import Request, Response
+from flask import Request, make_response
+from posts.posts import get_posts
+from posts.models import AddPostMetadata
+from posts.exceptions import CreatePostException, GetPostException, UnknownPostIdException
 
+REQUEST_ARG_USER_ID = 'userId'
+REQUEST_ARG_POST_ID = 'postId'
+REQUEST_ARG_IMAGE_URL = 'imageUrl'
 
 def posts(request: Request) -> Response:
     """Return data related to posts.
@@ -17,11 +23,45 @@ def posts(request: Request) -> Response:
         <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>.
 
     """
-    # TODO(posts): Handle request
-    posts = []
-    posts_json = json.dumps(posts)
-    response = Response(posts_json, content_type='application/json; charset=utf-8')
-    response.headers.add('content-length', len(posts_json))
+    response = None
+    if request.method == 'GET':
+        # TODO(posts): Fetch individual posts
+        try:
+            posts = get_posts()
+            posts_json = json.dumps(posts)
+            status = 200
+            headers = {
+                'Content-Length': len(posts_json)
+            }
+            response = make_response((posts_json, status, headers))
+        except GetPostQueryException:
+            error_body = {
+                'errorCode': 'unknown',
+                'message': 'An unknown server error occured. Try again later.'
+            }
+            response = make_response((error_body, 500))
+        except UnknownPostIdException:
+            error_body = {
+                'errorCode': 'unknownPostId',
+                'message': 'The provided post does not exist.'
+            }
+            response = make_response((error_body, 404))
+        except:
+            response = _generate_server_error()
+    elif request.method === 'POST':
+        try:
+            imageUrl = request.args.get(REQUEST_ARG_IMAGE_URL)
+            if imageUrl is None or imageUrl == ''
+                add_post_metadata = AddPostMetadata()
+            # TODO: Handle uploads
+        except CreatePostException:
+            response = _generate_server_error()
+    else:
+        error_body = {
+            'errorCode': 'methodNotSupported',
+            'message': 'This HTTP method is support supported by this server.'
+        }
+        response = make_response((error_body, 405))
     return response
 
 
@@ -41,3 +81,11 @@ def auth(request: Request) -> Response:
     """
     # TODO: Handle request
     return Response('OK', status=200)
+
+
+def _generate_server_error() -> Response:
+    error_body = {
+        'errorCode': 'unknown',
+        'message': 'An unknown server error occured. Try again later.'
+    }
+    return make_response((error_body, 500))
