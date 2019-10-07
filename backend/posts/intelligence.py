@@ -52,4 +52,4 @@ def generate_image_metadata(image_url: str) -> List[PostPredictionData]:
         confidence = json_object['confidence']
         prediction = PostPredictionData(confidence, tag)
         predictions.add(prediction)
-    return image_metadata
+    return predictions
