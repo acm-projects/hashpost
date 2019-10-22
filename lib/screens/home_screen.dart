@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hashpost/screens/login_screen.dart';
+import 'package:hashpost/screens/screens.dart';
+import 'package:hashpost/screens/settings_screen.dart';
 import 'package:hashpost/shared/shared.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,12 +15,29 @@ class HomeScreen extends StatelessWidget {
         elevation: 0.0,
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Icon(Icons.settings),
+             padding: const EdgeInsets.all(0.5),
+            child: IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) => SettingsScreen()),
+                );
+              }
+            ),
+            
           ),
           Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Icon(Icons.perm_identity),
+            padding: const EdgeInsets.all(0.5),
+            child: IconButton(
+              icon: Icon(Icons.perm_identity),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
+                );
+              }
+            ),
           ),
         ],
       ),
@@ -116,3 +136,4 @@ class PostTile extends StatelessWidget {
     );
   }
 }
+
