@@ -75,3 +75,4 @@
 # Backend-related
 # Don't check in virtual environment
 /backend/env
+env/
