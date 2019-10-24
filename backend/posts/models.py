@@ -6,11 +6,10 @@ class PostMetadata:
     machine learning.
     """
 
-    def __init__(self, id: str, image_url: str, hashtags: list, caption: str):
+    def __init__(self, id: str, image_url: str, hashtags: list):
         self.id = id
         self.image_url = image_url
         self.hashtags = hashtags
-        self.caption = caption
 
 
 class AddPostMetadata:
