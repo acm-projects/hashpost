@@ -1,8 +1,10 @@
 import json
 from flask import Request, make_response
-from posts.posts import get_posts
+from flask_uploads import UploadSet, IMAGES
+from posts.posts import get_posts, add_post, upload_blob
 from posts.models import AddPostMetadata
 from posts.exceptions import CreatePostException, GetPostException, UnknownPostIdException
+from requests import Response
 
 REQUEST_ARG_USER_ID = 'userId'
 REQUEST_ARG_POST_ID = 'postId'
@@ -34,26 +36,30 @@ def posts(request: Request) -> Response:
                 'Content-Length': len(posts_json)
             }
             response = make_response((posts_json, status, headers))
-        except GetPostQueryException:
-            error_body = {
-                'errorCode': 'unknown',
-                'message': 'An unknown server error occured. Try again later.'
-            }
-            response = make_response((error_body, 500))
         except UnknownPostIdException:
             error_body = {
                 'errorCode': 'unknownPostId',
                 'message': 'The provided post does not exist.'
             }
             response = make_response((error_body, 404))
+        except GetPostException:
+            error_body = {
+                'errorCode': 'unknown',
+                'message': 'An unknown server error occured. Try again later.'
+            }
+            response = make_response((error_body, 500))
         except:
             response = _generate_server_error()
-    elif request.method === 'POST':
+    elif request.method == 'POST':
         try:
-            imageUrl = request.args.get(REQUEST_ARG_IMAGE_URL)
-            if imageUrl is None or imageUrl == ''
-                add_post_metadata = AddPostMetadata()
-            # TODO: Handle uploads
+            # TODO: Upload photo from request to Cloud Storage
+            # TODO: Create new AddPostMetadata object using image URL from Cloud Storage
+            # TODO: Call add_posts with /\
+            # TODO: Return the result of add_post as JSON
+            photos = UploadSet('photos', IMAGES)
+            fileName = photos.save(request.files['photo'])
+            upload_blob(fileName, "/posts/test")
+
         except CreatePostException:
             response = _generate_server_error()
     else:
@@ -80,7 +86,7 @@ def auth(request: Request) -> Response:
 
     """
     # TODO: Handle request
-    return Response('OK', status=200)
+    return make_response(('OK', 200))
 
 
 def _generate_server_error() -> Response:
