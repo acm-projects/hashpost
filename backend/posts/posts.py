@@ -1,7 +1,8 @@
 """Functions related to post management and database communcation."""
 
 from typing import List
-from firebase_admin import firestore, initialize_app
+import firebase_admin   
+from firebase_admin import firestore, initialize_app, credentials, storage
 from google.cloud.exceptions import NotFound
 from intelligence import generate_image_metadata
 from models import AddPostMetadata, PostMetadata
@@ -11,13 +12,13 @@ COLLECTION_POSTS = u'/posts'
 
 # Initialize Firebase with Application Default Credentials
 initialize_app(name='hashpost')
-
 db = firestore.client()
 
+# Initialize Firebase Bucket
+firebase_admin.initialize_app({'storageBucket': 'hashpost.appspot.com'})
 
-def add_post(data: AddPostMetadata) -> str:
+def add_post(data: AddPostMetadata) -> PostMetadata:
     """Upload a post's metadata to our database.
-
     Our database is currently Google Cloud Firestore.
 
     Args:
@@ -29,14 +30,22 @@ def add_post(data: AddPostMetadata) -> str:
     Raises:
         CreatePostException if an internal server error occurred.
     """
+
     try:
         post_data = generate_image_metadata(data.image_url)
         (timestamp, doc) = db.collection(COLLECTION_POSTS) \
             .add(post_data.to_json())
-        # TODO: Add timestamp to document
-        return doc.id
+        return post_data
     except:
         raise CreatePostException()
+
+def upload_blob(source_file_name, destination_blob_name):
+    """Uploads a file to the bucket."""
+    bucket = storage.bucket()
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    # Checks If File Is Successfully Uploaded
+    print('File {} uploaded to {}.'.format(source_file_name, destination_blob_name))
 
 
 def get_posts() -> List[PostMetadata]:
