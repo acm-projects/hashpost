@@ -8,6 +8,7 @@ REQUEST_ARG_USER_ID = 'userId'
 REQUEST_ARG_POST_ID = 'postId'
 REQUEST_ARG_IMAGE_URL = 'imageUrl'
 
+
 def posts(request: Request) -> Response:
     """Return data related to posts.
 
@@ -34,24 +35,24 @@ def posts(request: Request) -> Response:
                 'Content-Length': len(posts_json)
             }
             response = make_response((posts_json, status, headers))
-        except GetPostQueryException:
-            error_body = {
-                'errorCode': 'unknown',
-                'message': 'An unknown server error occured. Try again later.'
-            }
-            response = make_response((error_body, 500))
         except UnknownPostIdException:
             error_body = {
                 'errorCode': 'unknownPostId',
                 'message': 'The provided post does not exist.'
             }
             response = make_response((error_body, 404))
+        except GetPostException:
+            error_body = {
+                'errorCode': 'unknown',
+                'message': 'An unknown server error occurred. Try again later.'
+            }
+            response = make_response((error_body, 500))
         except:
             response = _generate_server_error()
-    elif request.method === 'POST':
+    elif request.method == 'POST':
         try:
-            imageUrl = request.args.get(REQUEST_ARG_IMAGE_URL)
-            if imageUrl is None or imageUrl == ''
+            image_url = request.args.get(REQUEST_ARG_IMAGE_URL)
+            if image_url is None or image_url == '':
                 add_post_metadata = AddPostMetadata()
             # TODO: Handle uploads
         except CreatePostException:

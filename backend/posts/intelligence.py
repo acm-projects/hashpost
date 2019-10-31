@@ -2,7 +2,6 @@ import requests
 import os
 import base64
 from typing import List
-from models import PostMetadata
 
 API_BASE = 'https://api.imagga.com/v2'
 
@@ -45,11 +44,11 @@ def generate_image_metadata(image_url: str) -> List[PostPredictionData]:
     Returns:
         A list of PostPredictionData containing results from hashtag generation.
     """
-    result_json = _get_imagga_data(imageUrl)
+    result_json = _get_imagga_data(image_url)
     predictions = []
     for json_object in result_json.result.tags:
         tag = json_object['tag']['en']
         confidence = json_object['confidence']
         prediction = PostPredictionData(confidence, tag)
-        predictions.add(prediction)
+        predictions.append(prediction)
     return predictions
