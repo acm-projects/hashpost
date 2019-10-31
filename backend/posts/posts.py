@@ -61,12 +61,13 @@ def get_post_by_id(post_id: str) -> PostMetadata:
         A PostMetadata object containing post data.
     """
     try:
-        doc = db.collection(COLLECTION_POSTS) \
+        posts = db.collection(COLLECTION_POSTS) \
             .document(post_id) \
             .get()
+        # TODO: Validate that this post is text
         if len(posts) < 1:
             raise UnknownPostIdException()
-        return
+        return posts[0]
     except NotFound:
         raise UnknownPostIdException()
     except:
