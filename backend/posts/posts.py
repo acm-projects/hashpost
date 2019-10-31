@@ -44,7 +44,7 @@ def upload_blob(source_file_name, destination_blob_name):
     bucket = storage.bucket()
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
-    # Checks If File Is Successfully Uploaded
+    # Prints If File Is Successfully Uploaded
     print('File {} uploaded to {}.'.format(source_file_name, destination_blob_name))
 
 
