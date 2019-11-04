@@ -1,8 +1,14 @@
 """Functions related to post management and database communcation."""
 
 from typing import List
+
 import firebase_admin   
 from firebase_admin import firestore, initialize_app, credentials, storage
+import pyrebase
+
+from flask import Flask, render_template, request, flash, redirect, url_for
+from werkzeug.utils import secure_filename
+
 from google.cloud.exceptions import NotFound
 from intelligence import generate_image_metadata
 from models import AddPostMetadata, PostMetadata
@@ -10,12 +16,24 @@ from exceptions import CreatePostException, GetPostException, UnknownPostIdExcep
 
 COLLECTION_POSTS = u'/posts'
 
+
+firebaseConfig = {
+  "apiKey": "AIzaSyCA3OrlBV1UIeSl2AXL0YnlqCE0xMwv_s4",
+  "authDomain": "hashpost.firebaseapp.com",
+  "databaseURL": "https://hashpost.firebaseio.com",
+  "projectId": "hashpost",
+  "storageBucket": "hashpost.appspot.com",
+  "messagingSenderId": "142555671587",
+  "appId": "1:142555671587:web:6807408877be551d391596"
+}
+
 # Initialize Firebase with Application Default Credentials
 initialize_app(name='hashpost')
 db = firestore.client()
 
-# Initialize Firebase Bucket
-firebase_admin.initialize_app({'storageBucket': 'hashpost.appspot.com'})
+firebase = pyrebase.initialize_app(firebaseConfig) # Intialize Firebase with configuration settings
+storage = firebase.storage() # Intialize Storage on the Cloud
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def add_post(data: AddPostMetadata) -> PostMetadata:
     """Upload a post's metadata to our database.
@@ -30,7 +48,7 @@ def add_post(data: AddPostMetadata) -> PostMetadata:
     Raises:
         CreatePostException if an internal server error occurred.
     """
-
+    
     try:
         post_data = generate_image_metadata(data.image_url)
         (timestamp, doc) = db.collection(COLLECTION_POSTS) \
@@ -39,14 +57,18 @@ def add_post(data: AddPostMetadata) -> PostMetadata:
     except:
         raise CreatePostException()
 
-def upload_blob(source_file_name, destination_blob_name):
+def upload(image):
     """Uploads a file to the bucket."""
-    bucket = storage.bucket()
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(source_file_name)
+    if image.filename == '': # If File Name is Empty
+        flash('No selected file')
+        return redirect(request.url)
+    if image and allowed_file(image.filename): # If Image Exists And Is An Allowed Extension
+        fileName = secure_filename(image.filename) # Store File Name
+    path = "images/" + fileName
+    imgUrl = storage.child(path).put(image) # Places Image Into Cloud Storage And Stores The JSON Response Of This Command
     # Prints If File Is Successfully Uploaded
-    print('File {} uploaded to {}.'.format(source_file_name, destination_blob_name))
-
+    print("File {} uploaded to 'hashpost'.".format(fileName))
+    print("Image URL : " + imgUrl)
 
 def get_posts() -> List[PostMetadata]:
     """Queries all posts that match the given filters.
@@ -96,3 +118,8 @@ def delete_post(post_id: str):
         raise UnknownPostIdException()
     except:
         raise DeletePostException()
+
+# Helper Functions
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
