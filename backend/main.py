@@ -1,6 +1,5 @@
 import json
 from flask import Request, make_response
-from flask_uploads import UploadSet, IMAGES
 from posts.posts import get_posts, add_post, upload
 from posts.models import AddPostMetadata
 from posts.exceptions import CreatePostException, GetPostException, UnknownPostIdException
