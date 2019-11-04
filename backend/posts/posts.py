@@ -18,7 +18,7 @@ COLLECTION_POSTS = u'/posts'
 
 
 firebaseConfig = {
-  "apiKey": "AIzaSyCA3OrlBV1UIeSl2AXL0YnlqCE0xMwv_s4",
+  "apiKey": "",
   "authDomain": "hashpost.firebaseapp.com",
   "databaseURL": "https://hashpost.firebaseio.com",
   "projectId": "hashpost",
