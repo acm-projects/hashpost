@@ -1,7 +1,7 @@
 import json
 from flask import Request, make_response
 from flask_uploads import UploadSet, IMAGES
-from posts.posts import get_posts, add_post, upload_blob
+from posts.posts import get_posts, add_post, upload
 from posts.models import AddPostMetadata
 from posts.exceptions import CreatePostException, GetPostException, UnknownPostIdException
 from requests import Response
@@ -50,22 +50,21 @@ def posts(request: Request) -> Response:
             response = make_response((error_body, 500))
         except:
             response = _generate_server_error()
-    elif request.method == 'POST':
+    elif request.method == 'POST' and 'photo' in request.files:
         try:
             # TODO: Upload photo from request to Cloud Storage
             # TODO: Create new AddPostMetadata object using image URL from Cloud Storage
             # TODO: Call add_posts with /\
             # TODO: Return the result of add_post as JSON
-            photos = UploadSet('photos', IMAGES)
-            fileName = photos.save(request.files['photo'])
-            upload_blob(fileName, "/posts/test")
+            image = request.files['photo']
+            upload(image)
 
         except CreatePostException:
             response = _generate_server_error()
     else:
         error_body = {
             'errorCode': 'methodNotSupported',
-            'message': 'This HTTP method is support supported by this server.'
+            'message': 'This HTTP method is not supported by this server.'
         }
         response = make_response((error_body, 405))
     return response
