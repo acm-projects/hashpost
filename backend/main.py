@@ -3,6 +3,7 @@ from flask import Request, make_response
 from posts.posts import get_posts, add_post, upload
 from posts.models import AddPostMetadata
 from posts.exceptions import CreatePostException, GetPostException, UnknownPostIdException
+from posts.intelligence import _get_imagga_data
 from requests import Response
 
 REQUEST_ARG_USER_ID = 'userId'
@@ -56,8 +57,9 @@ def posts(request: Request) -> Response:
             # TODO: Call add_posts with /\
             # TODO: Return the result of add_post as JSON
             image = request.files['photo']
-            upload(image)
-
+            imgUrl = upload(image)
+            json_response = _get_imagga_data(imgUrl)
+            print(json_response)
         except CreatePostException:
             response = _generate_server_error()
     else:
