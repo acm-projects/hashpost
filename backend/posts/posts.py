@@ -16,23 +16,12 @@ from exceptions import CreatePostException, GetPostException, UnknownPostIdExcep
 
 COLLECTION_POSTS = u'/posts'
 
-
-firebaseConfig = {
-  "apiKey": "",
-  "authDomain": "hashpost.firebaseapp.com",
-  "databaseURL": "https://hashpost.firebaseio.com",
-  "projectId": "hashpost",
-  "storageBucket": "hashpost.appspot.com",
-  "messagingSenderId": "142555671587",
-  "appId": "1:142555671587:web:6807408877be551d391596"
-}
-
 # Initialize Firebase with Application Default Credentials
-initialize_app(name='hashpost')
+initialize_app({'storageBucket': 'hashpost.appspot.com'})
+bucket = storage.bucket()
+
 db = firestore.client()
 
-firebase = pyrebase.initialize_app(firebaseConfig) # Intialize Firebase with configuration settings
-storage = firebase.storage() # Intialize Storage on the Cloud
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def add_post(data: AddPostMetadata) -> PostMetadata:
@@ -64,11 +53,13 @@ def upload(image):
         return redirect(request.url)
     if image and allowed_file(image.filename): # If Image Exists And Is An Allowed Extension
         fileName = secure_filename(image.filename) # Store File Name
-    path = "images/" + fileName
-    imgUrl = storage.child(path).put(image) # Places Image Into Cloud Storage And Stores The JSON Response Of This Command
-    # Prints If File Is Successfully Uploaded
-    print("File {} uploaded to 'hashpost'.".format(fileName))
-    print("Image URL : " + imgUrl)
+    path = "posts/" + fileName
+
+    blob = bucket.blob(path) # Set Destination
+    blob.upload_from_file(image) # Upload Image File
+
+    imgUrl = blob.path # Get Image URL Of BLOB
+    return imgUrl
 
 def get_posts() -> List[PostMetadata]:
     """Queries all posts that match the given filters.
