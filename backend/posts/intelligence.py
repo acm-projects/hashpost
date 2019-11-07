@@ -1,6 +1,7 @@
 import requests
 import os
 import base64
+import urllib.parse
 from typing import List
 from models import PostMetadata
 
@@ -23,18 +24,21 @@ class PostPredictionData:
 
 
 def _get_imagga_data(image_url: str):
-    api_key = os.getenv('IMAGGA_API_KEY', None)
+    api_key = os.getenv('IMAGGA_API_KEY', None) # Get API Key From Environment Variable
+    url_query = urllib.parse.quote(image_url) # URL Encode Given Image URL
+
     if api_key is None:
         raise Exception('API key not provided in environment variables!')
     hashed_key = str(base64.b64encode(api_key.encode('utf-8')), 'utf-8')
-    data = {
-        'image': image_url,
-        'limit': TAG_LIMIT,
-    }
+    '''
     headers = {
         'Authorization': f'Basic {hashed_key}'
     }
-    response = requests.post(API_ENDPOINT_TAGS, data, headers)
+    '''
+    access_url = f'https://api.imagga.com/v2/tags?image_url={url_query}&limit={TAG_LIMIT}'
+
+    # TODO: Does Not Accept "hashed_key" as a parameter. Figure what "api_secret" is
+    response = requests.get(access_url, auth=(api_key, api_secret))
     response_json = response.json()
     return response_json
 
