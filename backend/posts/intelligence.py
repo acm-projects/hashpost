@@ -38,7 +38,7 @@ def _get_imagga_data(image_url: str):
     access_url = f'https://api.imagga.com/v2/tags?image_url={url_query}&limit={TAG_LIMIT}'
 
     # TODO: Does Not Accept "hashed_key" as a parameter. Figure what "api_secret" is
-    response = requests.get(access_url, auth=(api_key, api_secret))
+    response = requests.get(access_url, auth=(api_key, hashed_key))
     response_json = response.json()
     return response_json
 
