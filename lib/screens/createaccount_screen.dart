@@ -1,118 +1,80 @@
-
 import 'package:flutter/material.dart';
 
-import 'createaccount_screen.dart';
-import 'editing_screen.dart';
-
-
-// class LoginScreen extends StatelessWidget {
-  
-//   @override
+// class CreateAccountScreen extends StatelessWidget{
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
 //         elevation: 0.0,
-//         backgroundColor: Theme.of(context).primaryColor,
+//         backgroundColor: Theme.of(context).primaryColor
 //       ),
 //       body: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //         children: [   
+
+//           // ConstrainedBox(
+//           //   constraints: BoxConstraints.expand(),
+//           //   child: FlatButton(onPressed: null,
+//           //   child: Image.asset('C:\Users\sahan\OneDrive\Documents\Visual Studio\HashPost\google_signin_buttons'))
+//           // ), 
 //           Text(
-//             "Welcome to",
+//             "Create Account",
 //             style: TextStyle(
-//             color: Colors.black,
-//             //fontWeight: FontWeight.bold,
-//             fontSize: 45
-//             )
-//           ),
-//           Text(
-//             "HashPost",
-//             style: TextStyle(
-//             color: Colors.black,
+//             color: Colors.grey[800],
 //             fontWeight: FontWeight.bold,
-//             fontSize: 45
+//             fontSize: 20
 //             )
 //           ),
-//         Padding(padding: EdgeInsets.only(top: 10.0, bottom: 7.0)),
-//         new Container(             
-//           width: MediaQuery.of(context).size.width * 0.85,
-//           child: TextField(
-//               decoration: InputDecoration(
-//               labelText: 'Username'
-//             ),
+//         TextField(
+//           decoration: InputDecoration(
+//           labelText: 'Username'
 //           ),
 //         ),
-//         new Container(              
-//           width: MediaQuery.of(context).size.width * 0.85,
-//           child: TextField(
-//               decoration: InputDecoration(
-//               labelText: 'Password'
-//             ),
+//         TextField(
+//           decoration: InputDecoration(
+
+//             labelText: 'Password'
 //           ),
 //         ),
+//         TextField(
+//           decoration: InputDecoration(
 
-//         // TextField(//idk why I need this, but it centers the all components
-//         //   decoration: InputDecoration(
-//         //     labelText: ''
-            
-//         //   ),
-//         // ),
-
-//         Padding(padding: EdgeInsets.symmetric(vertical: 7.0)),
-//         GestureDetector(
-//           onTap: () {
-//             print("onTap called.");
-//             Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (BuildContext context) => CreateAccountScreen()),
-//             );
-//           },
-//           child: Text(
-//             "Don't have an account? Let's make one",
-//             textScaleFactor: 0.8,
-//             textAlign: TextAlign.center,
-//             overflow: TextOverflow.ellipsis,
-//             style: TextStyle(color: Colors.black),
-//             ),
+//             labelText: 'Confirm Password'
 //           ),
+//         ),
 //         Padding(padding: EdgeInsets.only(top: 7.0, bottom: 7.0)),
 //         Padding(
-//           padding: const EdgeInsets.all(6.0),
+//           padding: const EdgeInsets.all(15.0),
 //           child: FlatButton(
-//             color: Colors.black,
+//             color: Colors.grey,
 
 //             onPressed: () {
 //               //Add later, what to do when login button is pressed
 //             },
-//             child: Text("Login", style: TextStyle(color: Colors.white) ),
+//             child: Text("Create Account"),
 //           ),
 //           ),
 //         Text(
-//           " OR ",
+//           "------------------- or -------------------",
 //           style: TextStyle(
-//           color: Colors.black,
+//           color: Colors.grey[600],
 //           //textAlign: TextAlign.center,
 //           fontSize: 12
 //           )
 //         ),
-//         Padding(padding: EdgeInsets.only(top: 2.0, bottom: 7.0)),
+//         Padding(padding: EdgeInsets.only(top: 7.0, bottom: 7.0)),
 //         RaisedButton(
 //           padding: EdgeInsets.only(top: 3.0,bottom: 3.0,left: 3.0),
 //           color: const Color(0xFF4285F4),
-//           onPressed: () {
-//             print("sign in with google");
-//           },
+//           onPressed: () {},
 //           child: new Row(
 //             mainAxisSize: MainAxisSize.min,
 //             children: <Widget>[
 //               new Image.asset(
 //                 'res/images/icons/google/btn_google_dark_normal_mdpi.9.png',
-//                 height: 35.0,
+//                 height: 48.0,
 //               ),
 //               new Container(
 //                 padding: EdgeInsets.only(left: 10.0,right: 10.0),
-//                   child: new Text("Sign in with Google",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)
+//                   child: new Text("Sign in with Google", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)
 //               ),
 //             ],
 //           )
@@ -120,19 +82,10 @@ import 'editing_screen.dart';
 //       ])
 //     );
 //   }
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     // TODO: implement createState
-//     return null;
-//   }
-
-
-//    //State createState() => new _LoginScreenState();
 // }
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
+class CreateAccountScreen extends StatelessWidget{
+  const CreateAccountScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,27 +107,10 @@ class LoginScreen extends StatelessWidget {
               Image.asset("assets/images/logo 2.png"),
               Text("hashpost.", style: TextStyle(fontSize: 25.0, color: Colors.white, fontWeight: FontWeight.w500)),
               Text("socials made easier.", style: TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w500)),
-              LoginWidget(),
-              
-              Container(
-                alignment: Alignment.center,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don't have an account?", style: TextStyle(fontSize: 11.0, color: Colors.grey)),
-                    GestureDetector(
-                      child: Text(" Let's make one!", style:TextStyle(color: Colors.redAccent, fontSize: 11.0), textAlign: TextAlign.left),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (BuildContext context) => CreateAccountScreen()),
-                        );
-                      }
-                    )
-                  ]
-                ),
-              )
+              Padding(padding: EdgeInsets.all(10.0),),
+              Text("Automatically sync up your old posts and make hashtagging easier by selecting from a range of relevent hashtags.", style: TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+
+              CreateAccountWidget(),
             ]
           )
         ),
@@ -183,14 +119,14 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginWidget extends StatefulWidget {
-  const LoginWidget({Key key}) : super(key: key);
+class CreateAccountWidget extends StatefulWidget {
+  const CreateAccountWidget({Key key}) : super(key: key);
 
   @override
-  _LoginWidgetState createState() => _LoginWidgetState();
+  _CreateAccountWidgetState createState() => _CreateAccountWidgetState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _CreateAccountWidgetState extends State<CreateAccountWidget> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -215,7 +151,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Text("OR LOG IN WITH EMAIL", style: TextStyle(fontSize: 11.0, color: Colors.white, fontWeight: FontWeight.w100)),
+            child: Text("OR SIGN UP WITH EMAIL", style: TextStyle(fontSize: 11.0, color: Colors.white, fontWeight: FontWeight.w100)),
           ),
           Padding(
             padding: const EdgeInsets.all(3.0),
@@ -247,17 +183,13 @@ class _LoginWidgetState extends State<LoginWidget> {
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
               
-              child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              child: Text("Create Account", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               color: Colors.green,
-               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 70.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
                 print(_email.text);
                 print(_password.text);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => EditingScreen()),
-                );
               },
             ),
           )
