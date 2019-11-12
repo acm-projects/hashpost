@@ -92,6 +92,9 @@ flutter:
         - asset: assets/fonts/Poppins-SemiBoldItalic.ttf
           weight: 600
           style: italic
+
+  assets:
+     - assets/images/  
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
