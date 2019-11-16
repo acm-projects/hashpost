@@ -52,14 +52,10 @@ def posts(request: Request) -> Response:
             response = _generate_server_error()
     elif request.method == 'POST' and 'photo' in request.files:
         try:
-            # TODO: Upload photo from request to Cloud Storage
-            # TODO: Create new AddPostMetadata object using image URL from Cloud Storage
-            # TODO: Call add_posts with /\
-            # TODO: Return the result of add_post as JSON
             image = request.files['photo']
             imgUrl = upload(image)
             json_response = _get_imagga_data(imgUrl)
-            print(json_response)
+            return json_response
         except CreatePostException:
             response = _generate_server_error()
     else:
