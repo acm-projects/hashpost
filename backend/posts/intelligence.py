@@ -7,6 +7,7 @@ import base64
 import urllib.parse
 from typing import List
 from models import PostMetadata
+import json
 
 import IPython.display as display
 from PIL import Image
@@ -15,6 +16,8 @@ import matplotlib.pyplot as plt
 import pathlib
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
+IMG_WIDTH = 299
+IMG_HEIGHT = 299
 
 # TF Model Variables
 # data_dir = pathlib.Path("C:/Users/Mr. Jeevs/.keras/datasets/flower_photos")
@@ -84,24 +87,45 @@ def generate_image_metadata(image_url: str) -> List[PostPredictionData]:
         predictions.append(prediction)
     return predictions
 
-def __get__tag__data(image_url: str):
-    list_ds = tf.data.Dataset.list_files(str(data_dir/'*'))
+def __get__tag__data():
+    with open("instances_train2017.json") as f:
+        train_data = json.load(f)
 
+    images = train_data["images"]
+    annotations = train_data["annotations"]
+
+    fileNames = []
+    catIDs = []
+
+    for i in images[:10]:
+        fileNames.append(i["file_name"])
+        for j in annotations:
+            if(i["id"] == j["image_id"]):
+                catIDs.append(j["category_id"])
+                break
+
+    print(fileNames)
+    print(catIDs)
+
+    list_ds = tf.data.Dataset.from_tensor_slices((fileNames, catIDs))
+
+    print("8=========================================================>")
     for f in list_ds.take(5):
-        print(f.numpy())
+        print(f)
+    print("8=========================================================>")
 
     # Set `num_parallel_calls` so multiple images are loaded/processed in parallel.
-    labeled_ds = list_ds.map(process_path, num_parallel_calls=AUTOTUNE)
+    labeled_ds = list_ds.map(process_img_label, num_parallel_calls=AUTOTUNE)
+    print(labeled_ds)
+    print("8=========================================================>")
+    thing = labeled_ds.take(1)
+    print(thing)
 
-    for image, label in labeled_ds.take(1):
-        print("Image shape: ", image.numpy().shape)
-        print("Label: ", label.numpy())
+    m = tf.keras.Sequential([
+        hub.KerasLayer("https://tfhub.dev/google/imagenet/inception_resnet_v2/classification/4", trainable=True, arguments=dict(batch_norm_momentum=0.99))
+    ])
 
-def get_label(file_path):
-  # convert the path to a list of path components
-  parts = tf.strings.split(file_path, os.path.sep)
-  # The second to last is the class-directory
-  return parts[-2] == CLASS_NAMES
+    m.build([None, 299, 299, 3])  # Batch input shape.
 
 def decode_img(img):
   # convert the compressed string to a 3D uint8 tensor
@@ -111,11 +135,16 @@ def decode_img(img):
   # resize the image to the desired size.
   return tf.image.resize(img, [IMG_WIDTH, IMG_HEIGHT])
 
-def process_path(file_path):
-  label = get_label(file_path)
-  # load the raw data from the file as a string
-  img = tf.io.read_file(file_path)
-  img = decode_img(img)
-  return img, label
+def process_img_label(fileName, label):
+    # load the raw data from the file as a string
+    img = tf.io.read_file(f'C:/Users/Mr. Jeevs/.keras/datasets/train2017/{fileName}')
+    img = decode_img(img)
+    print(img)
+    print(fileName)
+    print(label)
+    return img, label
 
-__get__tag__data("masala")
+def get_file_name(data):
+    return data["file_name"]
+
+__get__tag__data()
