@@ -1,39 +1,39 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'screens/screens.dart';
+import 'package:hashpost/locator.dart';
+import 'package:hashpost/ui/router.dart';
+import 'package:hashpost/ui/screens/screens.dart';
+import 'package:hashpost/ui/theme/theme_data.dart';
+import 'package:provider/provider.dart';
+import 'core/services/services.dart';
 
-void main() => runApp(HashPost());
+void main() {
+  setupLocator();
+  FluroRouter.setupRouter();
+  runApp(HashPost());
+}
 
 class HashPost extends StatelessWidget {
   const HashPost({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // removes the debug banner
-      debugShowCheckedModeBanner: false,
-      // need to work on this
-      theme: ThemeData(
-        // basic theme data
-        brightness: Brightness.light,
-        primaryColor: Color(0xffF1F1F3),
-        accentColor: Color(0xff04152A),
-
-        // default font family
-        fontFamily: "Poppins",
-
-        // text style presets
-        textTheme: TextTheme(
-          title: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w500),
-          body1: TextStyle(fontSize: 14.0)
-        )
+    return MultiProvider(
+      providers: [
+        StreamProvider<FirebaseUser>.value(value: locator<Auth>().user),
+        StreamProvider<ThemeData>.value(value: locator<HashPostTheme>().theme)
+      ],
+      child: Consumer<ThemeData>(
+        builder: (context, theme, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          // theme manager
+          theme: theme != null ? theme : HashPostTheme.darkTheme,
+          // routes
+          onGenerateRoute: FluroRouter.router.generator,
+          initialRoute: '/',
+        ),
       ),
-
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/editing': (context) => EditingScreen(),
-      },
-      // home screen, which we will replace with initialRoute when we add routes
-      initialRoute: '/'
     );
   }
 }
+
