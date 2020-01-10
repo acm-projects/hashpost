@@ -14,7 +14,7 @@ Using an image analysis API, data (such as dominate colors, explicitness, key ob
     * Ability to use onboard camera and photo album
    
    
-## Resouces 
+## Resources 
 
 ### Image Analysis API
   * [Google Vision API](https://cloud.google.com/vision/)
